@@ -1,11 +1,23 @@
 package simpledb;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Knows how to compute some aggregate over a set of StringFields.
  */
 public class StringAggregator implements Aggregator {
 
     private static final long serialVersionUID = 1L;
+
+    private int gbfield;
+    private Type gbfieldtype;
+    private int afield;
+    private Op what;
+    private Map<Field, Integer> fieldCntMap;
+    private static final StringField NO_GROUPING_FIELD = new StringField("NO_GROUPING_FIELD", 20);
 
     /**
      * Aggregate constructor
@@ -18,6 +30,14 @@ public class StringAggregator implements Aggregator {
 
     public StringAggregator(int gbfield, Type gbfieldtype, int afield, Op what) {
         // some code goes here
+        if (what != Op.COUNT) {
+            throw new IllegalArgumentException("Wrong operation type! Expect COUNT, get " + what);
+        }
+        this.gbfield = gbfield;
+        this.gbfieldtype = gbfieldtype;
+        this.afield = afield;
+        this.what = what;
+        this.fieldCntMap = new HashMap<>();
     }
 
     /**
@@ -26,6 +46,12 @@ public class StringAggregator implements Aggregator {
      */
     public void mergeTupleIntoGroup(Tuple tup) {
         // some code goes here
+        if (gbfield == NO_GROUPING) {
+            fieldCntMap.put(NO_GROUPING_FIELD, fieldCntMap.getOrDefault(NO_GROUPING_FIELD, 0) + 1);
+        }
+        else {
+            fieldCntMap.put(tup.getField(gbfield), fieldCntMap.getOrDefault(tup.getField(gbfield), 0) + 1);
+        }
     }
 
     /**
@@ -38,7 +64,19 @@ public class StringAggregator implements Aggregator {
      */
     public DbIterator iterator() {
         // some code goes here
-        throw new UnsupportedOperationException("please implement me for lab3");
+        TupleDesc tupleDesc = gbfield == NO_GROUPING ? new TupleDesc(new Type[]{Type.INT_TYPE}) : new TupleDesc(new Type[]{gbfieldtype, Type.INT_TYPE});
+        List<Tuple> tupleList = new ArrayList<>();
+        for (Field key : fieldCntMap.keySet()) {
+            Tuple tuple = new Tuple(tupleDesc);
+            if (gbfield == NO_GROUPING) {
+                tuple.setField(0, new IntField(fieldCntMap.get(key)));
+            }
+            else {
+                tuple.setField(0, key);
+                tuple.setField(1, new IntField(fieldCntMap.get(key)));
+            }
+            tupleList.add(tuple);
+        }
+        return new TupleIterator(tupleDesc, tupleList);
     }
-
 }
