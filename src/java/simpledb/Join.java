@@ -9,9 +9,9 @@ public class Join extends Operator {
 
     private static final long serialVersionUID = 1L;
 
-    JoinPredicate p;
-    DbIterator child1, child2;
-    Tuple t1;
+    private JoinPredicate p;
+    private DbIterator child1, child2;
+    private Tuple t1;
 
     /**
      * Constructor. Accepts to children to join and the predicate to join them

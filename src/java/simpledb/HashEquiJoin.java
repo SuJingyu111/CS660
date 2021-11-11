@@ -9,10 +9,10 @@ public class HashEquiJoin extends Operator {
 
     private static final long serialVersionUID = 1L;
 
-    JoinPredicate p;
-    DbIterator child1, child2;
-    Map<Field, List<Tuple>> hash2;
-    Tuple t1;
+    private JoinPredicate p;
+    private DbIterator child1, child2;
+    private Map<Field, List<Tuple>> hash2;
+    private Tuple t1;
 
     /**
      * Constructor. Accepts to children to join and the predicate to join them

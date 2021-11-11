@@ -9,9 +9,9 @@ public class Filter extends Operator {
 
     private static final long serialVersionUID = 1L;
 
-    Predicate p;
+    private Predicate p;
 
-    DbIterator child;
+    private DbIterator child;
 
     /**
      * Constructor accepts a predicate to apply and a child operator to read
