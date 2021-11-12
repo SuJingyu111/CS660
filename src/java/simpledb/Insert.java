@@ -1,5 +1,8 @@
 package simpledb;
 
+import javax.xml.crypto.Data;
+import java.io.IOException;
+
 /**
  * Inserts tuples read from the child operator into the tableId specified in the
  * constructor
@@ -7,6 +10,11 @@ package simpledb;
 public class Insert extends Operator {
 
     private static final long serialVersionUID = 1L;
+
+    private TransactionId t;
+    private DbIterator chid;
+    private int tableId;
+    private TupleDesc tupleDesc;
 
     /**
      * Constructor.
@@ -24,23 +32,34 @@ public class Insert extends Operator {
     public Insert(TransactionId t,DbIterator child, int tableId)
             throws DbException {
         // some code goes here
+        this.t = t;
+        this.chid = child;
+        this.tableId = tableId;
+
+        Type[] types = new Type[1];
+        types[0] = Type.INT_TYPE;
+        this.tupleDesc = new TupleDesc(types);
     }
 
     public TupleDesc getTupleDesc() {
         // some code goes here
-        return null;
+        return this.tupleDesc;
     }
 
     public void open() throws DbException, TransactionAbortedException {
         // some code goes here
+        this.chid.open();
     }
 
     public void close() {
         // some code goes here
+        this.chid.close();
     }
 
     public void rewind() throws DbException, TransactionAbortedException {
         // some code goes here
+        this.chid.close();
+        this.chid.open();
     }
 
     /**
@@ -58,17 +77,32 @@ public class Insert extends Operator {
      */
     protected Tuple fetchNext() throws TransactionAbortedException, DbException {
         // some code goes here
-        return null;
+        BufferPool bufferPool = Database.getBufferPool();
+        int count = 0;
+        while (this.chid.hasNext()) {
+            try {
+                count++;
+                bufferPool.insertTuple(this.t, this.tableId, this.chid.next());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        Tuple tup = new Tuple(this.tupleDesc);
+        tup.setField(0, new IntField(count));
+        return tup;
     }
 
     @Override
     public DbIterator[] getChildren() {
         // some code goes here
-        return null;
+        DbIterator[] children = new DbIterator[1];
+        children[0] = chid;
+        return children;
     }
 
     @Override
     public void setChildren(DbIterator[] children) {
         // some code goes here
+        this.chid = children[0];
     }
 }
