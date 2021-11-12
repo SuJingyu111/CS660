@@ -13,6 +13,7 @@ public class Delete extends Operator {
     private TransactionId t;
     private DbIterator chid;
     private TupleDesc tupleDesc;
+    private Tuple tup;
 
     /**
      * Constructor specifying the transaction that this delete belongs to as
@@ -31,6 +32,8 @@ public class Delete extends Operator {
         Type[] types = new Type[1];
         types[0] = Type.INT_TYPE;
         this.tupleDesc = new TupleDesc(types);
+
+        this.tup = null;
     }
 
     public TupleDesc getTupleDesc() {
@@ -69,6 +72,9 @@ public class Delete extends Operator {
         // some code goes here
         BufferPool bufferPool = Database.getBufferPool();
         int count = 0;
+        if (this.tup != null) {
+            return null;
+        }
         while (this.chid.hasNext()) {
             try {
                 count++;
@@ -77,7 +83,7 @@ public class Delete extends Operator {
                 e.printStackTrace();
             }
         }
-        Tuple tup = new Tuple(this.tupleDesc);
+        tup = new Tuple(this.tupleDesc);
         tup.setField(0, new IntField(count));
         return tup;
     }
