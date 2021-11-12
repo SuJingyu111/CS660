@@ -75,7 +75,7 @@ public class BufferPool {
      * @param pid the ID of the requested page
      * @param perm the requested permissions on the page
      */
-    public  Page getPage(TransactionId tid, PageId pid, Permissions perm)
+    public Page getPage(TransactionId tid, PageId pid, Permissions perm)
         throws TransactionAbortedException, DbException {
         // XXX Yuan points out that HashMap is not synchronized, so this is buggy.
         // XXX TODO(ghuo): do we really know enough to implement NO STEAL here?
