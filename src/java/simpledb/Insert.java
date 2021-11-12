@@ -49,17 +49,19 @@ public class Insert extends Operator {
     public void open() throws DbException, TransactionAbortedException {
         // some code goes here
         this.chid.open();
+        super.open();
     }
 
     public void close() {
         // some code goes here
         this.chid.close();
+        super.close();
     }
 
     public void rewind() throws DbException, TransactionAbortedException {
         // some code goes here
-        this.chid.close();
-        this.chid.open();
+        this.close();
+        this.open();
     }
 
     /**
