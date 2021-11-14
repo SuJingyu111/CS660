@@ -1,0 +1,7 @@
+1. Describe any design decisions you made with a little more details. If you used something other than a nested-loops join,
+   describe the tradeoffs of the algorithm you chose.
+    -No design choices were made in Ex1.
+    -In Ex2, in IntegerAggregator, we applied two HashMaps, one to store the information of tuples, another to store the
+     times each grouping field occurred, in order to calculate average. In StringAggregator, since only COUNT operation is supported,
+     there is only one map to record the count.
+    -No design choices were made in Ex3.

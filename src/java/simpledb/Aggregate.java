@@ -154,9 +154,8 @@ public class Aggregate extends Operator {
      */
     public TupleDesc getTupleDesc() {
 	    // some code goes here
-        TupleDesc tupleDesc = gfield == Aggregator.NO_GROUPING ? new TupleDesc(new Type[]{child.getTupleDesc().getFieldType(afield)}, new String[]{nameOfAggregatorOp(aop) + " " + aggregateFieldName()})
+        return gfield == Aggregator.NO_GROUPING ? new TupleDesc(new Type[]{child.getTupleDesc().getFieldType(afield)}, new String[]{nameOfAggregatorOp(aop) + " " + aggregateFieldName()})
                 : new TupleDesc(new Type[]{child.getTupleDesc().getFieldType(gfield), child.getTupleDesc().getFieldType(afield)}, new String[]{groupFieldName(), nameOfAggregatorOp(aop) + " " + aggregateFieldName()});
-	    return tupleDesc;
     }
 
     public void close() {
