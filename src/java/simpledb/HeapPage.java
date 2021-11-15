@@ -260,7 +260,7 @@ public class HeapPage implements Page {
             throw new DbException("Slot already empty!");
         }
         tuples[tupleNo] = null;
-        t.setRecordId(new RecordId(null, -1));
+        t.setRecordId(new RecordId(pid, -1));
         markSlotUsed(tupleNo, false);
     }
 

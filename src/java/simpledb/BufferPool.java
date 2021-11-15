@@ -82,6 +82,9 @@ public class BufferPool {
         //     won't we still evict pages?
         Page p;
         synchronized(this) {
+            if (pages == null) {
+                System.out.println("NUll!");
+            }
         	p = pages.get(pid); 
             if(p == null) {
                 if(pages.size() >= numPages) {
