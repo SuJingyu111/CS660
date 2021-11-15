@@ -1,0 +1,39 @@
+CS660 Project Assignment 3 Report
+
+######################################################################################################
+
+Name1: Jingyu Su
+UID1: U58115442
+
+Name2: Xingkun Yin
+UID2: U44255956
+
+######################################################################################################
+=====================================================================================
+1. Describe any design decisions you made. [Please refer to the lab website for detailed requirements here.]
+- No design choices were made in Ex1.
+- In Ex2, in IntegerAggregator, we applied two HashMaps, one to store the information of tuples, another to store the
+    times each grouping field occurred, in order to calculate average. In StringAggregator, since only COUNT operation is supported,
+    there is only one map to record the count.
+- No design choices were made in Ex3.
+- No design choices were made in Ex4.
+
+=====================================================================================
+2. Discuss and justify any changes you made to the API.
+We made no change to the API.
+
+=====================================================================================
+3. Describe any missing or incomplete elements of your code.
+We managed to implement all methods in this PA.
+
+=====================================================================================
+4. Describe how long you spent on the assignment, and whether there was anything you found particularly difficult or confusing.
+It took approximately 3 days to finish.
+
+=====================================================================================
+5. If you collaborate with someone else, you have to discribe how you split the workload.
+Work are done individually and then merged. Report wrote together.
+
+=====================================================================================
+######################################################################################################
+
