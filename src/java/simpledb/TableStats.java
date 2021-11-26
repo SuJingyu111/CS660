@@ -245,6 +245,7 @@ public class TableStats {
     public double estimateSelectivity(int field, Predicate.Op op, Field constant) {
         if (histograms != null) {
             if (td.getFieldType(field) == Type.INT_TYPE) {
+                //System.out.println("int");
                 IntHistogram hist = (IntHistogram) histograms[field];
                 double sel = hist.estimateSelectivity(op,
                         ((IntField) constant).getValue());
@@ -252,6 +253,7 @@ public class TableStats {
 //                        + op + " " + constant + " IS " + sel);
                 return sel;
             } else {
+                //System.out.println("str");
                 StringHistogram hist = (StringHistogram) histograms[field];
                 double sel = hist.estimateSelectivity(op,
                         ((StringField) constant).getValue());
