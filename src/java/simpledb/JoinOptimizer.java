@@ -155,6 +155,8 @@ public class JoinOptimizer {
             String field2PureName, int card1, int card2, boolean t1pkey,
             boolean t2pkey, Map<String, TableStats> stats,
             Map<String, Integer> tableAliasToId) {
+        //
+        // TableStats t1Stat = stats.get(table1Alias), t2Stat = stats.get(table2Alias);
         if (joinOp == Predicate.Op.EQUALS) {
             if (t1pkey) {
                 if (t2pkey) {
@@ -234,10 +236,29 @@ public class JoinOptimizer {
             HashMap<String, Double> filterSelectivities, boolean explain)
             throws ParsingException {
         //Not necessary for labs 1--3
-
         // some code goes here
         //Replace the following
-        return joins;
+        PlanCache planCache = new PlanCache();
+        for (int j = 1; j <= joins.size(); j++) {
+            Set<Set<LogicalJoinNode>> subsets = enumerateSubsets(joins, j);
+            for (Set<LogicalJoinNode> subset : subsets) {
+                CostCard bestPlan = new CostCard();
+                bestPlan.cost = Double.MAX_VALUE;
+                bestPlan.card = Integer.MAX_VALUE;
+                for (LogicalJoinNode joinNode : subset) {
+                    CostCard tempPlan = computeCostAndCardOfSubplan(stats, filterSelectivities, joinNode, subset, bestPlan.cost, planCache);
+                    if (tempPlan != null && tempPlan.cost < bestPlan.cost) {
+                        bestPlan = tempPlan;
+                    }
+                }
+                planCache.addPlan(subset, bestPlan.cost, bestPlan.card, bestPlan.plan);
+            }
+        }
+        Vector<LogicalJoinNode> optJoin = planCache.getOrder(new HashSet<>(joins));
+        if (explain) {
+            printJoins(optJoin, planCache, stats, filterSelectivities);
+        }
+        return optJoin;
     }
 
     // ===================== Private Methods =================================
